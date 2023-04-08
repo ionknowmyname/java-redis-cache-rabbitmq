@@ -33,7 +33,7 @@ public class CachingWithPubsubApplication implements CommandLineRunner, LifeCycl
     public void run(String... args) throws Exception {
         clientRepository.deleteAll();
 
-        List<ClientEntity>  toSave = new ArrayList<>();
+        List<ClientEntity> toSave = new ArrayList<>();
 
         for (int i = 1; i <= 5; i++) {
             toSave.add(ClientEntity.builder()

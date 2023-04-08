@@ -17,7 +17,7 @@ public record ClientService(ClientRepository clientRepository) {
 
         return clientRepository.save(ClientEntity.builder()
                 .name(entity.getName())
-                .isActive(entity.isActive())
+                .isActive(entity.getIsActive())
                 .build());
     }
 

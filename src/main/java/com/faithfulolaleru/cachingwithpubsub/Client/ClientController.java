@@ -18,7 +18,8 @@ public class ClientController {
 
     private final ClientService clientService;
 
-    public static final String MY_KEY = "clientsKey";
+    public static final String MY_KEY = "clientList";
+    public static final String MY_KEY2 = "singlePostClient";
 
     @Cacheable(value = "clients", key = "#root.target.MY_KEY")
     @GetMapping("/all")
@@ -26,7 +27,7 @@ public class ClientController {
         return AppResponse.<List<ClientEntity>>builder().data(clientService.getAllClients()).build();
     }
 
-    @CachePut(value = "clients", key = "#root.target.MY_KEY") // #root.methodName takes the method name as key
+    @CachePut(value = "clients", key = "#root.target.MY_KEY2") // #root.methodName takes the method name as key
     @PostMapping("/")
     public AppResponse<ClientEntity> createClient(@RequestBody ClientEntity entity) {
         ClientEntity response = clientService.createClient(entity);

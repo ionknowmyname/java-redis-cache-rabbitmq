@@ -21,5 +21,6 @@ public class ClientEntity implements Serializable {
 
     private String name;
 
-    private boolean isActive;
+    @Builder.Default
+    private Boolean isActive = false;
 }
