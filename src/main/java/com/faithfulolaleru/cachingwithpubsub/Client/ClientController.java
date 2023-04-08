@@ -1,5 +1,6 @@
 package com.faithfulolaleru.cachingwithpubsub.Client;
 
+import com.faithfulolaleru.cachingwithpubsub.response.AppResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -17,23 +18,25 @@ public class ClientController {
 
     private final ClientService clientService;
 
-    @Cacheable(value = "clients", key = "clientsKey")
+    public static final String MY_KEY = "clientsKey";
+
+    @Cacheable(value = "clients", key = "#root.target.MY_KEY")
     @GetMapping("/all")
-    public ResponseEntity<List<ClientEntity>> getAllClients() {
-        return ResponseEntity.ok(clientService.getAllClients());
+    public AppResponse<List<ClientEntity>> getAllClients() {
+        return AppResponse.<List<ClientEntity>>builder().data(clientService.getAllClients()).build();
     }
 
-    @CachePut(value = "clients", key = "clientsKey") // #response.id
+    @CachePut(value = "clients", key = "#root.target.MY_KEY") // #root.methodName takes the method name as key
     @PostMapping("/")
-    public ResponseEntity<ClientEntity> createClient(@RequestBody ClientEntity entity) {
+    public AppResponse<ClientEntity> createClient(@RequestBody ClientEntity entity) {
         ClientEntity response = clientService.createClient(entity);
 
-        return ResponseEntity.ok(response);
+        return AppResponse.<ClientEntity>builder().data(response).build();
     }
 
-    @CacheEvict(value = "users", allEntries=true)
+    @CacheEvict(value = "clients", allEntries=true)
     @DeleteMapping("/{clientId}")
-    public ResponseEntity<String> deleteClientById(@PathVariable String clientId) {
-        return ResponseEntity.ok(clientService.deleteClientById(clientId));
+    public AppResponse<String> deleteClientById(@PathVariable String clientId) {
+        return AppResponse.<String>builder().data(clientService.deleteClientById(clientId)).build();
     }
 }
